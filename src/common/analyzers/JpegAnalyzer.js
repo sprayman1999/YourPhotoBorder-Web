@@ -1,4 +1,3 @@
-import { Base64 } from "js-base64"
 class JpegAnalyzer{
     constructor(binaryFile){
         this.exif = EXIF.readFromBinaryFile(binaryFile)
@@ -36,12 +35,6 @@ class JpegAnalyzer{
     get_image_artist(){
         return this.exif['Artist']
     }
-    /*
-    get_original_datetime
-    get_image_orientation
-    get_camera_focal_length
-    get_camera_lens_model
-    */
     get_image_orientation(){
         return this.exif['Orientation']
     }
@@ -90,33 +83,17 @@ class JpegAnalyzer{
             if (marker === 0xFFC0) { // 找到 SOF0 段（帧标记）
                 const height = dataView.getUint16(offset + 5, false);
                 const width = dataView.getUint16(offset + 7, false);
-                return { width, height };
+                if (this.get_image_orientation() == 8){
+                    //竖着
+                    return { 'height':width, 'width':height };
+                }else{
+                    //横着
+                    return { 'height':height, 'width':width };
+                }
             }
         
             offset += segmentLength + 2; // 跳过当前段，前进到下一个段
         }
-        /*
-        const lock = new Promise((resolve, reject) => {
-            let blob = new Blob([this.binaryFile],{type:"image/jpeg"})
-            let picSrc = (window.URL || window.webkitURL).createObjectURL(blob)
-            let image = new Image();
-            image.src = picSrc;
-            image.onload = function() {
-              const width = image.width;
-              const height = image.height;
-              resolve({ width, height });
-            };
-            image.onerror = function() {
-              reject(new Error("Failed to load image"));
-            };
-            image.src = URL.createObjectURL(blob);
-        }).then(v => {
-            //this.rect = v
-            this.set_image_rect(v['width'],v['height'])
-            console.log(this.binaryFile)
-        });
-        await lock
-        */
     }
     get_width(){
         return this.width

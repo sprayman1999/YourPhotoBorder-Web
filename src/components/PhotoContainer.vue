@@ -10,7 +10,12 @@
         >
             <a-layout>
                 <a-layout-content>
-                    <canvas :id="canvasId" ></canvas>
+                    <a-image :id="previewImgId" width="400" height="300" fit="fill">
+                    </a-image>
+                </a-layout-content>
+                <a-layout-content>
+                    <canvas :id="canvasId" style="display: none;" ></canvas>
+
                 </a-layout-content>
                 <a-layout-footer>
                 <a-button type="primary">开始上传</a-button>
@@ -23,19 +28,26 @@
 import FileUpload from "vue-upload-component";
 import JpegAnalyzer from "../common/analyzers/JpegAnalyzer";
 import test_canvas from "../common/container/Container"
+
 export default{
     data(){
         return {
-            canvasId: "photo_canvas"
+            canvasId: "photo_canvas",
+            previewImgId: "image_preview"
         }
     },
     methods: {
         // 自定义代码
-        start_draw_canvas: function(imageFile,analyzer){
-            const canvas_element = document.getElementById(this.canvasId);
+         start_draw_canvas: async function(imageFile,analyzer){
+            const canvasElement = document.getElementById(this.canvasId);
+            const imageElement = document.getElementById(this.previewImgId);
+            const configResponse = await fetch("/static/configs/default.json")
+            const configContent = await configResponse.text()
+            const config = JSON.parse(configContent)
+            test_canvas(canvasElement,imageFile,analyzer,config,function callback(){
+                imageElement.src = canvasElement.toDataURL()
+            });
             
-            test_canvas(canvas_element,imageFile,analyzer);
-
             
         },
         // 事件代码

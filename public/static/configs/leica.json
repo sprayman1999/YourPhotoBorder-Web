@@ -1,0 +1,51 @@
+{
+    "output_quality": 100,
+    "config_name": "Leica",
+    "border_size": 0,
+    "background": [255,255,255],
+    "extra_length": "20%",
+    "camera_args_direction": "down",
+    "original_time_format": "%Y:%m:%d %H:%M:%S",
+    "target_time_format": "%Y-%m-%d %H:%M:%S",
+    "labels": [
+        {
+            "label_name": "camera model label",
+            "font_path": "./fonts/AlibabaPuHuiTi-3-75-SemiBold/AlibabaPuHuiTi-3-75-SemiBold.ttf",
+            "font_size": "4.5%",
+            "content": "${CAMERA_MODEL}",
+            "position_offset": ["3%","5%"],
+            "font_color": [0,0,0]
+        },
+        {
+            "label_name": "photo original datetime",
+            "font_path": "./fonts/AlibabaPuHuiTi-3-45-Light/AlibabaPuHuiTi-3-45-Light.ttf",
+            "font_size": "2.5%",
+            "content": "${PHOTO_ORIGINAL_DATETIME}",
+            "position_offset": ["3%","10%"],
+            "font_color": [0,0,0]
+        },
+        {
+            "label_name": "camera args",
+            "font_path": "./fonts/AlibabaPuHuiTi-3-55-Regular/AlibabaPuHuiTi-3-55-Regular.ttf",
+            "font_size": "3.8%",
+            "content": "${FOCAL_LENGTH}mm f/${APERTURE} ${EXPOSURE_TIME} ISO${CAMERA_ISO}",
+            "position_offset": ["68%","3.75%"],
+            "font_color": [0,0,0]
+        },
+        {
+            "label_name": "camera lens model",
+            "font_path": "./fonts/AlibabaPuHuiTi-3-45-Light/AlibabaPuHuiTi-3-45-Light.ttf",
+            "font_size": "3.5%",
+            "content": "${CAMERA_LENS_MODEL}",
+            "position_offset": ["68%","10%"],
+            "font_color": [0,0,0]
+        }
+    ],
+    "photos": [
+        {
+            "path": "./assets/camera_logos/Leica/logo.gif",
+            "position_offset": ["55%","0%"],
+            "scale": "85%"
+        }
+    ]
+}
