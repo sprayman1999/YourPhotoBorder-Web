@@ -74,6 +74,8 @@ class Container{
     init_canvas_rect(){
         this.canvasElement.width = this.analyzer.get_width()
         this.canvasElement.height = this.analyzer.get_height() + this.config['border_size'] * 2 + this.config['extra_length']
+        this.canvasCtx.fillStyle = "white";
+        this.canvasCtx.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
     }
     replace_label_content(content){
         let new_content = content
@@ -107,6 +109,7 @@ class Container{
             )
         }
         
+        
     }
     draw_photos_to_canvas(){
         const imageArray = new Array(this.config['photos'].length);
@@ -136,6 +139,7 @@ class Container{
     });
     }
     draw_image_to_canvas(){
+        
         const reader = new FileReader();
         reader.onload = () => {
 
