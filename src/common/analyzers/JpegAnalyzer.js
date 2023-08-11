@@ -2,7 +2,8 @@ class JpegAnalyzer{
     constructor(binaryFile,exifBinaryFile=null){
 
         this.exif = EXIF.readFromBinaryFile(binaryFile)
-        if (this.exif == false){
+        console.log(this.exif)
+        if (this.exif == false || Object.keys(this.exif).length < 5){
             this.exif=null
         }
         if(exifBinaryFile == null){
@@ -152,8 +153,7 @@ class JpegAnalyzer{
         if(this.exif == null){
             return ''
         }
-        const indexOfNull = this.exif['Lens'].indexOf('\x00');
-        return this.exif['Lens'].substr(0, indexOfNull)
+        return this.exif['Lens'].split('\x00').join('')
     }
     set_image_rect(width,height){
         console.log("shit")

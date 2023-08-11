@@ -18,7 +18,9 @@
             <icon-printer @click="onPrintPhotoButtonClicked(item)"/>
             <icon-image v-show="item.has_source_exif"/>
             <icon-delete @click="onDeletePhotoButtonClicked(item)"/>
+            <icon-download @click="onDownloadPhotoButtonClicked(item)"/>
         </template>
+        <canvas :id="item.canvas_id" style="display: none;"></canvas>
       </a-list-item>
     </a-list>
   </template>
@@ -26,7 +28,8 @@
 import PhotoDataStore from "../common/stores/PhotoData"
 import JpegAnalyzer from "../common/analyzers/JpegAnalyzer";
 import { computed,watch,ref  } from 'vue';
-
+import { v4 as uuidv4 } from 'uuid';
+import test_canvas from "../common/container/Container";
 export default{
     data(){
         return {
@@ -47,6 +50,29 @@ export default{
                     break
                 }
             }
+        },
+        onDownloadPhotoButtonClicked:async function(item){
+            let canvasElement = document.getElementById(item['canvas_id']);
+            let imageFile = item.photo_file
+            let analyzer = new JpegAnalyzer.JpegAnalyzer(item.photo_binary)
+            let configResponse = null
+            if(analyzer.get_image_orientation() == 1 && analyzer.get_width() > analyzer.get_height()){
+                configResponse = await fetch("/static/configs/default.json")
+            }else{
+                configResponse = await fetch("/static/configs/nikon_rotated.json")
+            }
+            
+            const configContent = await configResponse.text()
+            const config = JSON.parse(configContent)
+            test_canvas(canvasElement,imageFile,analyzer,config,function callback(){
+                var dataURL = canvasElement.toDataURL("image/jpeg",1.0);
+
+                // 创建一个链接，设置下载属性
+                var link = document.createElement("a");
+                link.href = dataURL;
+                link.download = analyzer.get_image_name(); // 下载文件名
+                link.click();
+            });
         }
     },
     setup(){
@@ -60,31 +86,40 @@ export default{
                 const binaryData = reader.result;
                 var analyzer = new JpegAnalyzer.JpegAnalyzer(binaryData)
                 analyzer.set_image_name(newFile.name);
+                // 说明有重名图片，最新传入图片的exif将作为旧图片的原始数据
                 for(var i = 0;i<photoList._value.length;i++){
-                    if (analyzer.get_image_name() == photoList._value[i]['title']){
+                    if (analyzer.get_image_name().toLowerCase() == photoList._value[i]['title'].toLowerCase()){
                         photoList._value[i]['has_source_exif'] = true
                         photoList._value[i]['source_exif_file'] = newFile
                         photoList._value[i]['subject'] = analyzer.get_camera_model() + " + " + analyzer.get_camera_lens()
+                        
                         return
                     }
                 }
                 if(analyzer.exif == null){
                     photoList._value.push({
                     "title": analyzer.get_image_name(),
+                    "filename": analyzer.get_image_name(),
                     "subject": "The exif not exists",
                     "photo_url": window.URL.createObjectURL(newFile.file),
                     "photo_file": newFile,
                     "has_source_exif": false,
-                    "source_exif_file":null
+                    "source_exif_file":null,
+                    "canvas_id": uuidv4(),
+                    "photo_binary": binaryData
                 })
                 }else{
+                    console.log(analyzer.get_camera_lens())
                     photoList._value.push({
                     "title": analyzer.get_image_name(),
+                    "filename": analyzer.get_image_name(),
                     "subject": analyzer.get_camera_model() + " + " + analyzer.get_camera_lens(),
                     "photo_url": window.URL.createObjectURL(newFile.file),
                     "photo_file": newFile,
                     "has_source_exif": false,
-                    "source_exif_file":null
+                    "source_exif_file":null,
+                    "canvas_id": uuidv4(),
+                    "photo_binary": binaryData
                 })
                 }
 
