@@ -26,11 +26,11 @@ class Container{
         //this.draw_labels_to_canvas()
         this.test()
     }
-    _drawTextWithExternalFont(canvasCtx, text, fontSize, x, y, color, externalFontPath) {
+    async _drawTextWithExternalFont(canvasCtx, text, fontSize, x, y, color, externalFontPath) {
         
         const ctx = canvasCtx;
         const myFont = new FontFace('myFont', 'url(' + externalFontPath + ')')
-        myFont.load().then(font => {
+        await myFont.load().then(font => {
             document.fonts.add(font)
         }).then(() => {
             // 保存当前字体设置
@@ -42,7 +42,7 @@ class Container{
             ctx.fillText(text, x, y);
             //restore
             ctx.font = originalFont
-            this.callback()
+            
         })
 
     }
@@ -90,7 +90,7 @@ class Container{
         new_content = new_content.split("${PHOTO_ORIGINAL_DATETIME}").join(this.analyzer.get_image_date())
         return new_content
     }
-    draw_labels_to_canvas(){
+    async draw_labels_to_canvas(){
         for(const key in this.config['labels']){
             let label_config = this.config['labels'][key];
             let label_name = label_config['label_name']
@@ -99,7 +99,7 @@ class Container{
             let content = this.replace_label_content(label_config['content'])
             let position_offset = label_config['position_offset']
             let font_color = label_config['font_color']
-            this._drawTextWithExternalFont(
+            await this._drawTextWithExternalFont(
                 this.canvasCtx,content,
                 font_size,
                 position_offset[0] + this.custom_rect['left'],
@@ -108,7 +108,7 @@ class Container{
                 font_path
             )
         }
-        
+        this.callback()
         
     }
     draw_photos_to_canvas(){
@@ -117,7 +117,7 @@ class Container{
         for(var i = 0;i<imageArray.length;i++){
             imageArray[i] = new Image();
             imageArray[i].src = this.config['photos'][i]['path']
-            promiseArray[i] = this.loadImage(imageArray[i])
+            promiseArray[i] = this.load_image(imageArray[i])
         }
         Promise.all(promiseArray).then(
             images => {
@@ -148,7 +148,7 @@ class Container{
 
             //console.log(reader.result)
             
-            Promise.all([this.loadImage(img)])
+            Promise.all([this.load_image(img)])
                 .then(images => {
                     this.canvasCtx.drawImage(images[0],this.config['border_size'],this.config['border_size'])
                     this.draw_photos_to_canvas()
@@ -161,7 +161,7 @@ class Container{
         }
         reader.readAsDataURL(this.imageFile.file);
     }
-    loadImage(img) {
+    load_image(img) {
         return new Promise((resolve, reject) => {
             img.onload = function() {
                 resolve(img);

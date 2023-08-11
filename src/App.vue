@@ -3,19 +3,37 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import PhotoContainer from './components/PhotoContainer.vue'
+import PhotoList from './components/PhotoList.vue';
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
+    <a-layout style="height: 400px;">
+      <a-layout-header>
+        <HelloWorld msg="You did it!" />
+        
+        
+      </a-layout-header>
+      <a-layout>
+        <a-layout-sider style="width: 500px;">
+          <PhotoList />
+        </a-layout-sider>
+        <a-layout-content>
+          <PhotoContainer />
+        </a-layout-content>
+      </a-layout>
+      <a-layout-footer>
+        <nav>
+          <RouterLink to="/">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </nav>
+      </a-layout-footer>
+    </a-layout>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-      <PhotoContainer />
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      
+      
+      
+
     </div>
   </header>
 

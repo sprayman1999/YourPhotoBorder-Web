@@ -1,12 +1,24 @@
 class JpegAnalyzer{
-    constructor(binaryFile){
+    constructor(binaryFile,exifBinaryFile=null){
+
         this.exif = EXIF.readFromBinaryFile(binaryFile)
+        if (this.exif == false){
+            this.exif=null
+        }
+        if(exifBinaryFile == null){
+            this.exifSource=null
+        }else{
+            this.exifSource = EXIF.readFromBinaryFile(exifBinaryFile)
+        }
+        
+        
         this.binaryFile = binaryFile
+        this.exifBinaryFile = exifBinaryFile
         this.rect = this.get_image_rect()
         this.width = this.rect['width']
         this.height = this.rect['height']
+        /*
         console.log(this.exif)
-        
         console.log("camera maker:"+this.get_camera_maker())
         console.log("camera fnumber:"+this.get_camera_fnumber())
         console.log("image artist:"+this.get_image_artist())
@@ -21,27 +33,63 @@ class JpegAnalyzer{
         console.log("image orientation:" + this.get_image_orientation())
         console.log("image width:" + this.width)
         console.log("image height:" + this.height)
-
+        */
     }
-    setImageName(name){
+    set_image_name(name){
         this.name = name
     }
-    getTag(key){
+    get_image_name(name){
+        return this.name
+    }
+    get_tag(key){
         return this.exif[key]
     }
     get_camera_maker(){
+        if(this.exifSource != null){
+            return this.exifSource['Make']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif["Make"]
     }
+
     get_image_artist(){
+        if(this.exifSource != null){
+            
+            return this.exifSource['Artist']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['Artist']
     }
     get_image_orientation(){
+        if(this.exif == null){
+            return 1
+        }
         return this.exif['Orientation']
     }
     get_camera_focal_length(){
+        if(this.exifSource != null){
+            return Math.trunc(this.exifSource['FocalLength'])
+        }
+        if(this.exif == null){
+            return ''
+        }
         return Math.trunc(this.exif['FocalLength'])
     }
     get_camera_exposure_time(){
+        if(this.exifSource != null){
+            if (this.exifSource['ExposureTime'] < 1){
+                return "1/" + this.exifSource['ExposureTime']['denominator']/this.exifSource['ExposureTime']['numerator']
+            }else{
+                return this.exifSource['ExposureTime']+"'"
+            }
+        }
+        if(this.exif == null){
+            return ''
+        }
         if (this.exif['ExposureTime'] < 1){
             return "1/" + this.exif['ExposureTime']['denominator']/this.exif['ExposureTime']['numerator']
         }else{
@@ -51,23 +99,61 @@ class JpegAnalyzer{
         
     }
     get_image_date(){
+        if(this.exifSource != null){
+            return this.exifSource['DateTimeOriginal']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['DateTimeOriginal']
     }
     get_camera_fnumber(){
+        if(this.exifSource != null){
+            return  this.exifSource['FNumber'].toFixed(1)
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['FNumber'].toFixed(1)
     }
     get_camera_software(){
+        if(this.exifSource != null){
+            return this.exifSource['Software']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['Software']
     }
     get_camera_iso(){
+        if(this.exifSource != null){
+            return this.exifSource['ISOSpeedRatings']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['ISOSpeedRatings']
     }
 
     get_camera_model(){
+        if(this.exifSource != null){
+            return this.exifSource['Model']
+        }
+        if(this.exif == null){
+            return ''
+        }
         return this.exif['Model']
     }
     get_camera_lens(){
-        return this.exif['Lens']
+        if(this.exifSource != null){
+            const indexOfNull = this.exifSource['Lens'].indexOf('\x00');
+            return this.exifSource['Lens'].substr(0, indexOfNull)
+        }
+        if(this.exif == null){
+            return ''
+        }
+        const indexOfNull = this.exif['Lens'].indexOf('\x00');
+        return this.exif['Lens'].substr(0, indexOfNull)
     }
     set_image_rect(width,height){
         console.log("shit")

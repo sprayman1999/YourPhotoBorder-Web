@@ -10,23 +10,23 @@
     "labels": [
         {
             "label_name": "camera model label",
-            "font_path": "./fonts/AlibabaPuHuiTi-3-75-SemiBold/AlibabaPuHuiTi-3-75-SemiBold.ttf",
+            "font_path": "/static/fonts/AlibabaPuHuiTi-3-75-SemiBold.ttf",
             "font_size": "3.5%",
             "content": "${CAMERA_MODEL}",
-            "position_offset": ["22%","2%"],
+            "position_offset": ["22%","4%"],
             "font_color": [0,0,0]
         },
         {
             "label_name": "camera lens model",
-            "font_path": "./fonts/AlibabaPuHuiTi-3-45-Light/AlibabaPuHuiTi-3-45-Light.ttf",
+            "font_path": "/static/fonts/AlibabaPuHuiTi-3-45-Light.ttf",
             "font_size": "1.8%",
             "content": "${CAMERA_LENS_MODEL}",
-            "position_offset": ["22%","7%"],
+            "position_offset": ["22%","8%"],
             "font_color": [0,0,0]
         },
         {
             "label_name": "photo original datetime",
-            "font_path": "./fonts/AlibabaPuHuiTi-3-45-Light/AlibabaPuHuiTi-3-45-Light.ttf",
+            "font_path": "/static/fonts/AlibabaPuHuiTi-3-45-Light.ttf",
             "font_size": "1.5%",
             "content": "${PHOTO_ORIGINAL_DATETIME}",
             "position_offset": ["22%","10%"],
@@ -35,27 +35,27 @@
 
         {
             "label_name": "camera args",
-            "font_path": "./fonts/AlibabaPuHuiTi-3-55-Regular/AlibabaPuHuiTi-3-55-Regular.ttf",
+            "font_path": "/static/fonts/AlibabaPuHuiTi-3-45-Light.ttf",
             "font_size": "2.2%",
             "content": "${FOCAL_LENGTH}mm f/${APERTURE} ${EXPOSURE_TIME} ISO${CAMERA_ISO}",
-            "position_offset": ["53%","3%"],
+            "position_offset": ["55%","5%"],
             "font_color": [0,0,0]
         },
 
         {
             "label_name": "camera sentence",
-            "font_path": "./fonts/AlibabaPuHuiTi-3-75-SemiBold/AlibabaPuHuiTi-3-75-SemiBold.ttf",
+            "font_path": "/static/fonts/AlibabaPuHuiTi-3-75-SemiBold.ttf",
             "font_size": "2.5%",
             "content": "尼康刀锐奶化，人像神器！",
-            "position_offset": ["53%","9%"],
+            "position_offset": ["55%","9%"],
             "font_color": [0,0,0]
         }
     ],
     "photos": [
         {
-            "path": "./assets/camera_logos/NIKON/logo.png",
-            "position_offset": ["0%","0%"],
-            "scale": "70%"
+            "path": "/static/assets/camera_logos/NIKON/logo.png",
+            "position_offset": ["3%","3%"],
+            "scale": "15%"
         }
     ]
 }
