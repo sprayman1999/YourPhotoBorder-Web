@@ -69,7 +69,13 @@ class JpegAnalyzer{
         if(this.exif == null){
             return 1
         }
-        return this.exif['Orientation']
+        if('Orientation' in this.exif){
+            return this.exif['Orientation']
+        }else{
+            //啥也没有找到的话 就默认横着
+            return 1
+        }
+        
     }
     get_camera_focal_length(){
         if(this.exifSource != null){
@@ -156,7 +162,6 @@ class JpegAnalyzer{
         return this.exif['Lens'].split('\x00').join('')
     }
     set_image_rect(width,height){
-        console.log("shit")
         this.rect = {'width':width,'height':height}
     }
     get_image_rect(){

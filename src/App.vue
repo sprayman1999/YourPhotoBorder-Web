@@ -7,99 +7,69 @@ import PhotoList from './components/PhotoList.vue';
 </script>
 
 <template>
-  <header>
-    <a-layout style="height: 400px;">
+  
+
+  <div class="">
+    <a-layout>
       <a-layout-header>
-        <HelloWorld msg="You did it!" />
-        
-        
+        <a-space direction="vertical" :size="24" style="display: block;">
+          <a-row class="grid-demo" style="height: 50px;">
+            <a-col :span="6">
+              <span>
+                <h3 style="margin: 12px;">YourPhotoBorder</h3>
+              </span>
+            </a-col>
+            <a-col :span="18">
+              <div></div>
+            </a-col>
+          </a-row>
+        </a-space>
       </a-layout-header>
-      <a-layout>
-        <a-layout-sider style="width: 500px;">
-          <PhotoList />
-        </a-layout-sider>
-        <a-layout-content>
-          <PhotoContainer />
-        </a-layout-content>
-      </a-layout>
-      <a-layout-footer>
-        <nav>
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/about">About</RouterLink>
-        </nav>
-      </a-layout-footer>
+      <a-layout-content >
+        <a-space direction="vertical" :size="24" style="display: block;">
+          <a-row class="grid-demo">
+            <a-col :span="16" class="left-side">
+              <div><PhotoList /></div>
+            </a-col>
+            <a-col :span="8" class="right-side">
+              <div><PhotoContainer /></div>
+            </a-col>
+          </a-row>
+        </a-space>
+      </a-layout-content>
+      <a-layout-footer>Footer</a-layout-footer>
     </a-layout>
-    <div class="wrapper">
-      
-      
-      
-
-    </div>
-  </header>
-
-  <RouterView />
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+.layout-demo :deep(.arco-layout-header),
+.layout-demo :deep(.arco-layout-footer),
+.layout-demo :deep(.arco-layout-sider-children),
+.layout-demo :deep(.arco-layout-content) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--color-white);
+  font-size: 16px;
+  font-stretch: condensed;
   text-align: center;
-  margin-top: 2rem;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+
+.layout-demo :deep(.arco-layout-header),
+.layout-demo :deep(.arco-layout-footer) {
+  height: 64px;
+  background-color: var(--color-primary-light-4);
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.layout-demo :deep(.arco-layout-sider) {
+  width: 206px;
+  background-color: var(--color-primary-light-3);
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+.layout-demo :deep(.arco-layout-content) {
+  background-color: rgb(var(--arcoblue-6));
 }
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>

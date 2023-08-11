@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        
         <div>
             <canvas :id="canvasId" style="display: none;"></canvas>
         </div>
