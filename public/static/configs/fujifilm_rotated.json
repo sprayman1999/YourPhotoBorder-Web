@@ -51,7 +51,7 @@
     ],
     "photos": [
         {
-            "path": "./assets/camera_logos/FUJIFILM/logo.jpeg",
+            "path": "./assets/camera_logos/Fujifilm/logo.jpeg",
             "position_offset": ["-38%","-3%"],
             "scale": "30%"
         }

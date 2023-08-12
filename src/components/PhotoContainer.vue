@@ -1,40 +1,35 @@
 <template>
     <div>
-        
         <div>
             <canvas :id="canvasId" style="display: none;"></canvas>
         </div>
-        <a-layout>
-            <a-layout-content>
-                <file-upload
-                    ref="upload"
-                    :entensions="['jpeg','jpg','png']"
-                    :drop="true"
-                    :maximum="999"
-                    :multiple="true"
-                    @input-file="inputFile"
-                >
-                    <a-image :id="previewImgId" :height="previewImgHeight" :width="previewImgWidth"></a-image>
-                </file-upload>
-            </a-layout-content>
-            <a-layout-footer>
-
-                <!--<a-button type="primary" >开始上传</a-button>-->
-                <!--<a-button type="primary" @click="onDownloadButtonClicked">下载图片</a-button>-->
-            </a-layout-footer>
-        </a-layout>
-        
+        <div>
+        </div>
+        <file-upload
+            style="width:100%;height:387px;"
+            :entensions="['jpeg','jpg','png']"
+            :drop="true"
+            :maximum="999"
+            :multiple="true"
+            @input-file="inputFile"
+        >
+            <a-image :id="previewImgId" width="100%" height="100%" fit="scale-down"></a-image>
+            <!--<a-image :id="previewImgId" :height="previewImgHeight" :width="previewImgWidth"></a-image>-->
+        </file-upload>
     </div>
 </template>
 <script>
 import FileUpload from "vue-upload-component";
 import JpegAnalyzer from "../common/analyzers/JpegAnalyzer";
 import test_canvas from "../common/container/Container";
-import PhotoDataStore from "@/common/stores/PhotoData";
+import PhotoDataStore from "@/common/stores/PhotoDataStore";
 import { computed,watch,ref  } from 'vue';
 export default{
     setup(){
 
+        return {
+
+        }
         
     },
     data(){
@@ -43,64 +38,59 @@ export default{
         const printPhotoData = {};
         function insertPhoto(data){
             photoDataStore.insertPhoto(data)
-            console.log(printPhotoData)
         }
         watch(receivePhoto, (newVal, oldVal) => {
-            let newFile = newVal['photo_file']
+            
+            let imageDataMap = newVal['image_data']
+            let config = newVal['config']
+            let newFile = imageDataMap['photo_file']
             const reader = new FileReader();
             reader.onload = () => {
                 const binaryData = reader.result;
                 //若存在exif，则需要再read一次exifBinaryData
-                if (newVal['has_source_exif'] == true){
-                    const exifReader = new FileReader();
-                    exifReader.onload = () => {
-                        const exifBinaryData = exifReader.result;
-                        var analyzer = new JpegAnalyzer.JpegAnalyzer(binaryData,exifBinaryData)
-                        analyzer.set_image_name(newFile.name);
-                        this.start_draw_canvas(newFile,analyzer);
-                    }
-                    exifReader.readAsArrayBuffer(newVal['source_exif_file'].file);
+                if (imageDataMap['has_source_exif'] == true){
+                    var analyzer = new JpegAnalyzer.JpegAnalyzer(binaryData,imageDataMap['exif_photo_binary'])
+                    analyzer.set_image_name(imageDataMap.name);
+                    this.start_draw_canvas(newFile,analyzer,config);
                     return
                 }
                 var analyzer = new JpegAnalyzer.JpegAnalyzer(binaryData)
                 if (analyzer.exif == null){
                     analyzer.set_image_name(newFile.name);
-                    this.start_draw_canvas(newFile,analyzer);
+                    this.start_draw_canvas(newFile,analyzer,config);
                 }else{
                     analyzer.set_image_name(newFile.name);
-                    this.start_draw_canvas(newFile,analyzer);
+                    this.start_draw_canvas(newFile,analyzer,config);
                 }
             }
+            console.log(newFile)
             reader.readAsArrayBuffer(newFile.file);
         });
 
-
+        let allConfig = "";
+        fetch("/static/your_photo_border_config.json").then(response => {
+            response.text().then(data => {
+                this.$data.allConfig = JSON.parse(data);
+            })
+        })
 
         return {
             canvasId: "photo_canvas",
             previewImgId: "image_preview",
             insertPhoto,
             printPhotoData,
-            previewImgWidth: ref(300),
-            previewImgHeight: ref(400),
-            downloadFilename: ''
+            previewImgWidth: 300,
+            previewImgHeight: 400,
+            downloadFilename: '',
+            allConfig,
         }
     },
     methods: {
+
         // 自定义代码
-         start_draw_canvas: async function(imageFile,analyzer){
+         start_draw_canvas: async function(imageFile,analyzer,config){
             const canvasElement = document.getElementById(this.canvasId);
             const imageElement = document.getElementById(this.previewImgId);
-            //const configResponse = await fetch("/static/configs/default.json")
-            var configResponse = null
-            if(analyzer.get_image_orientation() == 1 && analyzer.get_width() > analyzer.get_height()){
-                configResponse = await fetch("/static/configs/default.json")
-            }else{
-                configResponse = await fetch("/static/configs/nikon_rotated.json")
-            }
-            
-            const configContent = await configResponse.text()
-            const config = JSON.parse(configContent)
             test_canvas(canvasElement,imageFile,analyzer,config,function callback(){
                 this.previewImgHeight=1000;
                 imageElement.src = canvasElement.toDataURL("image/jpeg",0.1)
@@ -126,23 +116,6 @@ export default{
             */
            
             this.insertPhoto({'photo_file':newFile})
-        },
-
-        onDownloadButtonClicked: function(){
-            if(this.downloadFilename == null || this.downloadFilename == ''){
-                alert("Empty Image Container!")
-                return
-            }
-            const canvasElement = document.getElementById(this.$data.canvasId);
-            var dataURL = canvasElement.toDataURL("image/jpeg",1.0);
-
-            // 创建一个链接，设置下载属性
-            var link = document.createElement("a");
-            link.href = dataURL;
-            link.download = this.downloadFilename; // 下载文件名
-
-            // 模拟点击链接以触发下载
-            link.click();
         },
 
     },

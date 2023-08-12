@@ -6,13 +6,8 @@ class JpegAnalyzer{
         if (this.exif == false || Object.keys(this.exif).length < 5){
             this.exif=null
         }
-        if(exifBinaryFile == null){
-            this.exifSource=null
-        }else{
-            this.exifSource = EXIF.readFromBinaryFile(exifBinaryFile)
-        }
         
-        
+        this.exifSource = (exifBinaryFile == null) ? null : EXIF.readFromBinaryFile(exifBinaryFile)        
         this.binaryFile = binaryFile
         this.exifBinaryFile = exifBinaryFile
         this.rect = this.get_image_rect()

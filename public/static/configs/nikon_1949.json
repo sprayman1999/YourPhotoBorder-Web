@@ -43,7 +43,7 @@
     ],
     "photos": [
         {
-            "path": "./assets/camera_logos/NIKON/pic_1949.jpg",
+            "path": "./assets/camera_logos/Nikon/pic_1949.jpg",
             "position_offset": ["50%","-1%"],
             "scale": "65%"
         }

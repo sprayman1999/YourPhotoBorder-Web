@@ -1,6 +1,6 @@
 {
     "output_quality": 100,
-    "config_name": "fujifilm",
+    "config_name": "Fujifilm",
     "border_size": 0,
     "background": [255,255,255],
     "extra_length": "20%",
@@ -43,7 +43,7 @@
     ],
     "photos": [
         {
-            "path": "./assets/camera_logos/FUJIFILM/logo.jpeg",
+            "path": "./assets/camera_logos/Fujifilm/logo.jpeg",
             "position_offset": ["32%","0%"],
             "scale": "35%"
         }

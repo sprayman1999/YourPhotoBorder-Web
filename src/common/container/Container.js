@@ -20,7 +20,7 @@ class Container{
         this.init_canvas_rect()
         
 
-        //照片绘画到canvas上
+        //照片绘画到canvas上,然后在回调里面进一步把配置中的照片也画上去
         this.draw_image_to_canvas()
         //标签绘画到canvas上
         //this.draw_labels_to_canvas()
@@ -51,7 +51,6 @@ class Container{
         console.log("this.config: ",this.config)
     }
     fix_basic_config(){
-        console.log(this.config)
         this.config['extra_length'] = parseFloat(this.config['extra_length']) / 100 * this.analyzer.get_height()
 
         // 替换文本
@@ -127,16 +126,15 @@ class Container{
                         this.config['photos'][i]['position_offset'][0] + this.custom_rect['left'],
                         this.config['photos'][i]['position_offset'][1] + this.custom_rect['top'],
                         this.config['photos'][i]['scale'],
-                        this.config['photos'][i]['scale']
+                        images[i].height / images[i].width * this.config['photos'][i]['scale']
                     )
                 }
                 this.draw_labels_to_canvas()
-                //this.callback()
             }
         )
         .catch(error => {
             console.error("An error occurred while loading images:", error);
-    });
+        });
     }
     draw_image_to_canvas(){
         
@@ -146,8 +144,6 @@ class Container{
             var img = new Image();
             img.src = reader.result;
 
-            //console.log(reader.result)
-            
             Promise.all([this.load_image(img)])
                 .then(images => {
                     this.canvasCtx.drawImage(images[0],this.config['border_size'],this.config['border_size'])

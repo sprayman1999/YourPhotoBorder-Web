@@ -1,0 +1,24 @@
+{
+    "rules": [
+        {
+            "camera_company": "Nikon",
+            "camera_horizontal_config": "/static/configs/nikon.json",
+            "camera_rotated_config": "/static/configs/nikon_rotated.json"
+        },
+        {
+            "camera_company": "Fujifilm",
+            "camera_horizontal_config": "/static/configs/fujifilm.json",
+            "camera_rotated_config": "/static/configs/fujifilm_rotated.json"
+        },
+        {
+            "camera_company": "Canon",
+            "camera_horizontal_config": "/static/configs/canon.json",
+            "camera_rotated_config": "/static/configs/canon_rotated.json"
+        },
+        {
+            "camera_company": "SONY",
+            "camera_horizontal_config": "/static/configs/sony.json",
+            "camera_rotated_config": "/static/configs/sony_rotated.json"
+        }
+    ]
+}
