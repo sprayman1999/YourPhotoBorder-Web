@@ -16,7 +16,7 @@
             "camera_rotated_config": "/static/configs/canon_rotated.json"
         },
         {
-            "camera_company": "SONY",
+            "camera_company": "Sony",
             "camera_horizontal_config": "/static/configs/sony.json",
             "camera_rotated_config": "/static/configs/sony_rotated.json"
         }
