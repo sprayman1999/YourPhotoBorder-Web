@@ -4,6 +4,6 @@
  - Python Version -> https://github.com/sprayman1999/YourPhotoBorder
 ## Try It！
  - open this link -> http://your-photo-border-web.gdb.wiki
- ![](demo/demo.jpg)
+ ![](demo/demo.png)
 ## Has question?
  - 请提交你的issue，我会尽快处理(Please submit your issue and I will process it as soon as possible.)
